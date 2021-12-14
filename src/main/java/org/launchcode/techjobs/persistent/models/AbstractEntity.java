@@ -1,49 +1,38 @@
 package org.launchcode.techjobs.persistent.models;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
 
-@MappedSuperclass
-public abstract class AbstractEntity {
-
-    @Id
-    @GeneratedValue
-    private int id;
+@Entity
+public class Employer extends AbstractEntity {
 
     @NotBlank(message = "Field is required")
     @Size(min=1 , max=255)
-    private String name;
+    private String location;
 
-    public int getId() {
-        return id;
+    @OneToMany
+    @JoinColumn(name = "employer_id")
+    private final List<Job> jobs = new ArrayList<>();
+
+    public String getLocation() {
+        return location;
     }
 
-    public String getName() {
-        return name;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setName(String name) {
-        this.name = name;
+
+
+    public Employer() {}
+
+
+
+
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AbstractEntity that = (AbstractEntity) o;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-}
